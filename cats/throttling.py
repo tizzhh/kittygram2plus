@@ -1,6 +1,6 @@
-from rest_framework import throttling
-
 import datetime
+
+from rest_framework import throttling
 
 
 class WorkingHoursRateThrottle(throttling.BaseThrottle):

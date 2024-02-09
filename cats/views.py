@@ -1,8 +1,14 @@
-from rest_framework import viewsets, permissions
+from rest_framework import permissions, viewsets
+from rest_framework.pagination import (
+    LimitOffsetPagination,
+    PageNumberPagination,
+)
 from rest_framework.throttling import ScopedRateThrottle
+
 from .models import Achievement, Cat, User
-from .throttling import WorkingHoursRateThrottle
+from .pagination import CatsPagination
 from .serializers import AchievementSerializer, CatSerializer, UserSerializer
+from .throttling import WorkingHoursRateThrottle
 
 
 class ReadOnly(permissions.BasePermission):
@@ -27,6 +33,7 @@ class CatViewSet(viewsets.ModelViewSet):
     permission_classes = (OwnerOrReadOnly,)
     throttle_classes = (WorkingHoursRateThrottle, ScopedRateThrottle)
     throttle_scope = 'low_request'
+    pagination_class = CatsPagination
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
